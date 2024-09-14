@@ -94,8 +94,8 @@ def analyze_vacancies(vacancies):
 
     return total_vacancies, avg_salary, top_5_with_percent
 
-# Функция для сохранения результата в файл JSON
-def save_to_json(city, vacancy_name, total_vacancies, avg_salary, top_5_requirements):
+# Функция для сохранения результата анализа в файл JSON
+def save_analysis_to_json(city, vacancy_name, total_vacancies, avg_salary, top_5_requirements):
     data = {
         "city": city,
         "vacancy_name": vacancy_name,
@@ -109,6 +109,11 @@ def save_to_json(city, vacancy_name, total_vacancies, avg_salary, top_5_requirem
 
     with open("vacancies_analysis.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
+# Функция для сохранения всех данных вакансий в файл JSON
+def save_vacancies_to_json(vacancies):
+    with open("vacancies_data.json", "w", encoding="utf-8") as f:
+        json.dump(vacancies, f, ensure_ascii=False, indent=4)
 
 # Основная часть программы
 if __name__ == "__main__":
@@ -132,9 +137,13 @@ if __name__ == "__main__":
             for req, count, percent in top_5_requirements:
                 print(f"{req}: {count} упоминаний ({percent:.2f}%)")
 
-            # Сохранение результата в файл
-            save_to_json(city, vacancy_name, total_vacancies, avg_salary, top_5_requirements)
-            print("\nРезультаты сохранены в файл vacancies_analysis.json")
+            # Сохранение результата анализа в файл
+            save_analysis_to_json(city, vacancy_name, total_vacancies, avg_salary, top_5_requirements)
+
+            # Сохранение всех полученных данных по вакансиям в отдельный файл
+            save_vacancies_to_json(vacancies)
+
+            print("\nРезультаты сохранены в файлы vacancies_analysis.json и vacancies_data.json")
 
         else:
             print("Нет доступных вакансий по заданным параметрам.")
