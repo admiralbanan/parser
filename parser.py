@@ -22,8 +22,8 @@ def get_vacancies(city_code, vacancy_name):
     url = 'https://api.hh.ru/vacancies'
     params = {
         'text': vacancy_name,
-        'area': city_code,  # Код города
-        'per_page': 100  # Максимальное количество вакансий на страницу
+        'area': city_code,
+        'per_page': 100
     }
 
     vacancies = []
@@ -57,9 +57,8 @@ def analyze_vacancies(vacancies):
     requirements_count = {}
 
     for vacancy in vacancies:
-        # Считаем среднюю зарплату
         salary = vacancy.get('salary')
-        if salary and salary['currency'] == 'RUR':  # Фильтруем зарплаты в рублях
+        if salary and salary['currency'] == 'RUR':
             if salary['from'] and salary['to']:
                 avg_salary = (salary['from'] + salary['to']) / 2
             elif salary['from']:
@@ -70,12 +69,11 @@ def analyze_vacancies(vacancies):
                 avg_salary = 0
             total_salary += avg_salary
 
-        # Анализируем требования к вакансиям
         description = vacancy.get('snippet', {}).get('requirement', '')
         if description:
             words = description.lower().split()
             for word in words:
-                if len(word) >= 3:  # Учитываем только слова, длиной 3 или более букв
+                if len(word) >= 3:
                     if word in requirements_count:
                         requirements_count[word] += 1
                     else:
@@ -83,13 +81,11 @@ def analyze_vacancies(vacancies):
 
     avg_salary = total_salary / total_vacancies if total_vacancies > 0 else 0
 
-    # Сортируем требования по убыванию и берем топ 5
     sorted_requirements = sorted(requirements_count.items(), key=lambda x: x[1], reverse=True)
     top_5_requirements = sorted_requirements[:5]
 
     total_requirements = sum(requirements_count.values())
 
-    # Добавляем процентное соотношение
     top_5_with_percent = [(req, count, (count / total_requirements) * 100) for req, count in top_5_requirements]
 
     return total_vacancies, avg_salary, top_5_with_percent
@@ -102,7 +98,7 @@ def save_analysis_to_json(city, vacancy_name, total_vacancies, avg_salary, top_5
         "total_vacancies": total_vacancies,
         "average_salary": avg_salary,
         "top_requirements": [
-            {"requirement": req, "count": count, "percentage": percent} 
+            {"requirement": req, "count": count, "percentage": percent}
             for req, count, percent in top_5_requirements
         ]
     }
@@ -115,18 +111,14 @@ def save_vacancies_to_json(vacancies):
     with open("vacancies_data.json", "w", encoding="utf-8") as f:
         json.dump(vacancies, f, ensure_ascii=False, indent=4)
 
-# Основная часть программы
-if __name__ == "__main__":
-    city = input("Введите название города: ")
-    vacancy_name = input("Введите название вакансии: ")
-
-    # Получаем код города по его названию
+# Основная функция для запуска парсинга
+def run_parser(city, vacancy):
     city_code = get_city_code(city)
     
     if city_code:
         print(f"Код города {city}: {city_code}")
         print("\nПолучение данных с hh.ru...")
-        vacancies = get_vacancies(city_code, vacancy_name)
+        vacancies = get_vacancies(city_code, vacancy)
 
         if vacancies:
             total_vacancies, avg_salary, top_5_requirements = analyze_vacancies(vacancies)
@@ -137,10 +129,7 @@ if __name__ == "__main__":
             for req, count, percent in top_5_requirements:
                 print(f"{req}: {count} упоминаний ({percent:.2f}%)")
 
-            # Сохранение результата анализа в файл
-            save_analysis_to_json(city, vacancy_name, total_vacancies, avg_salary, top_5_requirements)
-
-            # Сохранение всех полученных данных по вакансиям в отдельный файл
+            save_analysis_to_json(city, vacancy, total_vacancies, avg_salary, top_5_requirements)
             save_vacancies_to_json(vacancies)
 
             print("\nРезультаты сохранены в файлы vacancies_analysis.json и vacancies_data.json")

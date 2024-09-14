@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Парсер данных с HH.ru</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Парсер данных</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
+                <li class="nav-item"><a class="nav-link" href="/form">Форма</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contacts">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>Добро пожаловать на сайт парсера данных с HH.ru</h1>
+        <p>Этот сайт предназначен для парсинга и выгрузки данных исключительно с HH.ru.</p>
+        
+        <h2>Истории и анекдоты</h2>
+        <div id="story">
+            <!-- Здесь будет показана случайная история -->
+        </div>
+    </div>
+
+    <script>
+        const stories = [
+            "Мой начальник был настоящим идиотом. Однажды он сказал, что мы работаем не для удовольствия, а для премии... которую так и не выплатил!",
+            "На собеседовании меня спросили: 'Как вы справляетесь со стрессом?' Я ответил: 'Отлично, если не считать того, что я тут сижу и потею от страха!'",
+            "Уволили, потому что сказал правду на совещании. Оказалось, у начальства аллергия на честность.",
+            "Когда меня уволили, я сказал: 'Спасибо, наконец-то отпуск!'",
+            "Мой коллега однажды спал на работе. Начальник его разбудил и сказал: 'У нас оплачиваемая работа, а не оплачиваемый сон!'"
+        ];
+
+        function getRandomStory() {
+            const randomIndex = Math.floor(Math.random() * stories.length);
+            document.getElementById('story').innerHTML = `<p>${stories[randomIndex]}</p>`;
+        }
+
+        window.onload = getRandomStory;
+    </script>
+</body>
+</html>
