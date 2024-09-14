@@ -1,0 +1,33 @@
+{
+    "city": "Санкт-Петербург",
+    "vacancy_name": "инженер",
+    "total_vacancies": 2000,
+    "average_salary": 87545.01075,
+    "top_requirements": [
+        {
+            "requirement": "опыт",
+            "count": 1548,
+            "percentage": 5.195676981942673
+        },
+        {
+            "requirement": "работы",
+            "count": 1198,
+            "percentage": 4.020943814190776
+        },
+        {
+            "requirement": "высшее",
+            "count": 827,
+            "percentage": 2.7757266563737666
+        },
+        {
+            "requirement": "знание",
+            "count": 790,
+            "percentage": 2.651540578639995
+        },
+        {
+            "requirement": "образование.",
+            "count": 464,
+            "percentage": 1.5573605423910855
+        }
+    ]
+}
